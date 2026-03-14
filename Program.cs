@@ -74,6 +74,12 @@ class Program
                     MenuGuardarCargar();
                     break;
                 case "6":
+                    Console.Write("¿Guardar antes de salir? (s/n): ");
+                    string? guardar = Console.ReadLine();
+                    if (!string.IsNullOrEmpty(guardar) && guardar.Trim().ToLower() == "s")
+                    {
+                        GuardarDatos();
+                    }
                     Console.WriteLine("¡Hasta luego!");
                     return;
                 default:
