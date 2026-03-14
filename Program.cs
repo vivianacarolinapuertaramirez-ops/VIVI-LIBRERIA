@@ -68,9 +68,7 @@ class Program
                     MenuPrestamos();
                     break;
                 case "4":
-                    Console.WriteLine("Has seleccionado: Búsquedas y reportes");
-                    Console.WriteLine("Presiona Enter para continuar...");
-                    Console.ReadLine();
+                    MenuBusquedasReportes();
                     break;
                 case "5":
                     Console.WriteLine("Has seleccionado: Guardar / Cargar datos");
@@ -839,6 +837,334 @@ class Program
         Console.WriteLine("Préstamo eliminado.");
         Console.WriteLine("Presiona Enter para continuar...");
         Console.ReadLine();
+    }
+
+    static void MenuBusquedasReportes()
+    {
+        while (true)
+        {
+            Console.WriteLine("Submenú de Búsquedas y reportes:");
+            Console.WriteLine("1. Buscar libro");
+            Console.WriteLine("2. Buscar usuario");
+            Console.WriteLine("3. Reportes");
+            Console.WriteLine("0. Volver al menú principal");
+            Console.Write("Selecciona una opción: ");
+
+            string? subOpcion = Console.ReadLine();
+
+            switch (subOpcion)
+            {
+                case "1":
+                    BuscarLibro();
+                    break;
+                case "2":
+                    BuscarUsuario();
+                    break;
+                case "3":
+                    MenuReportes();
+                    break;
+                case "0":
+                    return;
+                default:
+                    Console.WriteLine("Opción no válida. Inténtalo de nuevo.");
+                    Console.WriteLine("Presiona Enter para continuar...");
+                    Console.ReadLine();
+                    break;
+            }
+
+            Console.Clear();
+        }
+    }
+
+    static void BuscarLibro()
+    {
+        while (true)
+        {
+            Console.WriteLine("Buscar libro:");
+            Console.WriteLine("1. Por título");
+            Console.WriteLine("2. Por autor");
+            Console.WriteLine("3. Por ID/ISBN");
+            Console.WriteLine("4. Por categoría");
+            Console.WriteLine("0. Volver");
+            Console.Write("Selecciona una opción: ");
+
+            string? opcion = Console.ReadLine();
+            if (opcion == null)
+                return;
+
+            switch (opcion)
+            {
+                case "1":
+                    Console.Write("Título a buscar: ");
+                    BuscarLibrosPorTexto(Console.ReadLine() ?? "", "titulo");
+                    break;
+                case "2":
+                    Console.Write("Autor a buscar: ");
+                    BuscarLibrosPorTexto(Console.ReadLine() ?? "", "autor");
+                    break;
+                case "3":
+                    Console.Write("ID/ISBN a buscar: ");
+                    BuscarLibrosPorTexto(Console.ReadLine() ?? "", "id");
+                    break;
+                case "4":
+                    Console.Write("Categoría a buscar: ");
+                    BuscarLibrosPorTexto(Console.ReadLine() ?? "", "categoria");
+                    break;
+                case "0":
+                    return;
+                default:
+                    Console.WriteLine("Opción no válida.");
+                    break;
+            }
+
+            Console.WriteLine("Presiona Enter para continuar...");
+            Console.ReadLine();
+        }
+    }
+
+    static void BuscarLibrosPorTexto(string texto, string campo)
+    {
+        texto = texto.Trim().ToLower();
+        if (texto == "")
+        {
+            Console.WriteLine("Texto vacío. Intenta de nuevo.");
+            return;
+        }
+
+        bool encontrado = false;
+        for (int i = 0; i < contadorLibros; i++)
+        {
+            string valor = campo switch
+            {
+                "titulo" => libros[i].titulo,
+                "autor" => libros[i].autor,
+                "id" => libros[i].id,
+                "categoria" => libros[i].categoria,
+                _ => "",
+            };
+
+            if (valor.ToLower().Contains(texto))
+            {
+                encontrado = true;
+                Console.WriteLine(
+                    $"ID: {libros[i].id}, Título: {libros[i].titulo}, Autor: {libros[i].autor}, Categoría: {libros[i].categoria}, Disponible: {libros[i].disponible}"
+                );
+            }
+        }
+
+        if (!encontrado)
+        {
+            Console.WriteLine("No se encontraron libros que coincidan.");
+        }
+    }
+
+    static void BuscarUsuario()
+    {
+        while (true)
+        {
+            Console.WriteLine("Buscar usuario:");
+            Console.WriteLine("1. Por nombre");
+            Console.WriteLine("2. Por ID/documento");
+            Console.WriteLine("0. Volver");
+            Console.Write("Selecciona una opción: ");
+
+            string? opcion = Console.ReadLine();
+            if (opcion == null)
+                return;
+
+            switch (opcion)
+            {
+                case "1":
+                    Console.Write("Nombre a buscar: ");
+                    BuscarUsuariosPorTexto(Console.ReadLine() ?? "", "nombre");
+                    break;
+                case "2":
+                    Console.Write("ID/documento a buscar: ");
+                    BuscarUsuariosPorTexto(Console.ReadLine() ?? "", "id");
+                    break;
+                case "0":
+                    return;
+                default:
+                    Console.WriteLine("Opción no válida.");
+                    break;
+            }
+
+            Console.WriteLine("Presiona Enter para continuar...");
+            Console.ReadLine();
+        }
+    }
+
+    static void BuscarUsuariosPorTexto(string texto, string campo)
+    {
+        texto = texto.Trim().ToLower();
+        if (texto == "")
+        {
+            Console.WriteLine("Texto vacío. Intenta de nuevo.");
+            return;
+        }
+
+        bool encontrado = false;
+        for (int i = 0; i < contadorUsuarios; i++)
+        {
+            string valor = campo switch
+            {
+                "nombre" => usuarios[i].nombre,
+                "id" => usuarios[i].id,
+                _ => "",
+            };
+
+            if (valor.ToLower().Contains(texto))
+            {
+                encontrado = true;
+                Console.WriteLine(
+                    $"ID: {usuarios[i].id}, Nombre: {usuarios[i].nombre}, Contacto: {usuarios[i].contacto}, Activo: {usuarios[i].activo}"
+                );
+            }
+        }
+
+        if (!encontrado)
+        {
+            Console.WriteLine("No se encontraron usuarios que coincidan.");
+        }
+    }
+
+    static void MenuReportes()
+    {
+        while (true)
+        {
+            Console.WriteLine("Reportes:");
+            Console.WriteLine("1. Préstamos por usuario");
+            Console.WriteLine("2. Préstamos por libro");
+            Console.WriteLine("3. Préstamos vencidos");
+            Console.WriteLine("4. Resumen general");
+            Console.WriteLine("0. Volver");
+            Console.Write("Selecciona una opción: ");
+
+            string? opcion = Console.ReadLine();
+            if (opcion == null)
+                return;
+
+            switch (opcion)
+            {
+                case "1":
+                    ReportePrestamosPorUsuario();
+                    break;
+                case "2":
+                    ReportePrestamosPorLibro();
+                    break;
+                case "3":
+                    ReportePrestamosVencidos();
+                    break;
+                case "4":
+                    ReporteResumenGeneral();
+                    break;
+                case "0":
+                    return;
+                default:
+                    Console.WriteLine("Opción no válida.");
+                    break;
+            }
+
+            Console.WriteLine("Presiona Enter para continuar...");
+            Console.ReadLine();
+        }
+    }
+
+    static void ReportePrestamosPorUsuario()
+    {
+        Console.Write("ID/Documento del usuario: ");
+        string idUsuario = Console.ReadLine() ?? "";
+
+        bool encontrado = false;
+        for (int i = 0; i < contadorPrestamos; i++)
+        {
+            if (prestamos[i].idUsuario == idUsuario)
+            {
+                encontrado = true;
+                Console.WriteLine(
+                    $"ID Préstamo: {prestamos[i].idPrestamo}, Libro: {prestamos[i].idLibro}, Estado: {prestamos[i].estado}, Fecha límite: {prestamos[i].fechaLimite}"
+                );
+            }
+        }
+
+        if (!encontrado)
+        {
+            Console.WriteLine("No se encontraron préstamos para ese usuario.");
+        }
+    }
+
+    static void ReportePrestamosPorLibro()
+    {
+        Console.Write("ID/ISBN del libro: ");
+        string idLibro = Console.ReadLine() ?? "";
+
+        bool encontrado = false;
+        for (int i = 0; i < contadorPrestamos; i++)
+        {
+            if (prestamos[i].idLibro == idLibro)
+            {
+                encontrado = true;
+                Console.WriteLine(
+                    $"ID Préstamo: {prestamos[i].idPrestamo}, Usuario: {prestamos[i].idUsuario}, Estado: {prestamos[i].estado}, Fecha límite: {prestamos[i].fechaLimite}"
+                );
+            }
+        }
+
+        if (!encontrado)
+        {
+            Console.WriteLine("No se encontraron préstamos para ese libro.");
+        }
+    }
+
+    static void ReportePrestamosVencidos()
+    {
+        bool encontrado = false;
+        DateTime hoy = DateTime.Today;
+
+        for (int i = 0; i < contadorPrestamos; i++)
+        {
+            if (prestamos[i].estado == "Activo")
+            {
+                if (DateTime.TryParse(prestamos[i].fechaLimite, out DateTime limite))
+                {
+                    if (limite < hoy)
+                    {
+                        encontrado = true;
+                        Console.WriteLine(
+                            $"ID Préstamo: {prestamos[i].idPrestamo}, Usuario: {prestamos[i].idUsuario}, Libro: {prestamos[i].idLibro}, Fecha límite: {prestamos[i].fechaLimite}"
+                        );
+                    }
+                }
+            }
+        }
+
+        if (!encontrado)
+        {
+            Console.WriteLine("No hay préstamos vencidos.");
+        }
+    }
+
+    static void ReporteResumenGeneral()
+    {
+        int totalLibros = contadorLibros;
+        int disponibles = 0;
+        int prestados = 0;
+
+        for (int i = 0; i < contadorLibros; i++)
+        {
+            if (libros[i].disponible)
+            {
+                disponibles++;
+            }
+            else
+            {
+                prestados++;
+            }
+        }
+
+        Console.WriteLine($"Total libros: {totalLibros}");
+        Console.WriteLine($"Disponibles: {disponibles}");
+        Console.WriteLine($"Prestados: {prestados}");
     }
 
     static int BuscarUsuarioIndex(string id)
