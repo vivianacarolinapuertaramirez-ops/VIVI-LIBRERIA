@@ -1,6 +1,6 @@
 using System;
 
-namespace LibreriaVIVI.Models
+namespace LibreriaVIVI.models
 {
     public class Usuario
     {
