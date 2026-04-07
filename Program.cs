@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ViviLibreria.services;
+using LibreriaVIVI.services;
 
-namespace ViviLibreria
+namespace LibreriaVIVI
 {
     // --- MODELOS ---
     // Cambiamos struct por class para usar las ventajas de C# moderno

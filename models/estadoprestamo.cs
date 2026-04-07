@@ -1,4 +1,4 @@
-namespace system_books.Models
+namespace LibreriaVIVI.Models
 {
     public enum EstadoPrestamo
     {

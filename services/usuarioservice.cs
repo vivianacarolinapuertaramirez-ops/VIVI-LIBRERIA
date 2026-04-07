@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using ViviLibreria.models;
+using LibreriaVIVI.models;
 
-namespace ViviLibreria.services
+namespace LibreriaVIVI.services
 {
     public class UsuarioService
     {
