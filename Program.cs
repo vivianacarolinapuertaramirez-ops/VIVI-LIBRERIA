@@ -126,32 +126,28 @@ namespace ViviLibreria
             Console.ReadLine();
         }
 
-        // --- GESTIÓN DE PRÉSTAMOS ---
         static void MenuPrestamos()
         {
             Console.Clear();
-            Console.WriteLine("1. Crear Préstamo\n0. Volver");
-            if (Console.ReadLine() == "1")
+            Console.WriteLine("1. Crear Préstamo\n2. Listar Préstamos\n0. Volver");
+            string op = Console.ReadLine() ?? "";
+
+            if (op == "1")
             {
                 Console.Write("ID Usuario: "); string idU = Console.ReadLine() ?? "";
                 Console.Write("ID Libro: "); string idL = Console.ReadLine() ?? "";
 
-                // Validación rápida usando las Listas
-                var user = usuarios.FirstOrDefault(u => u.Id == idU && u.Activo);
-                var book = libros.FirstOrDefault(l => l.Id == idL && l.Disponible);
+                // 5. DELEGACIÓN: Le pasamos la responsabilidad al PrestamoService
+                // Le enviamos los otros servicios para que él mismo busque los datos
+                bool exito = _prestamoService.GenerarPrestamo(idU, idL, _libroService, _usuarioService);
 
-                if (user != null && book != null)
-                {
-                    prestamos.Add(new Prestamo {
-                        IdPrestamo = Guid.NewGuid().ToString().Substring(0,5),
-                        IdUsuario = idU,
-                        IdLibro = idL,
-                        FechaPrestamo = DateTime.Now.ToShortDateString()
-                    });
-                    book.Disponible = false;
-                    Console.WriteLine("Préstamo realizado con éxito.");
-                }
-                else Console.WriteLine("Error: Usuario o Libro no válidos.");
+                if (exito) Console.WriteLine("Préstamo realizado con éxito.");
+                else Console.WriteLine("Error: Usuario o Libro no válidos / No disponibles.");
+            }
+            else if (op == "2")
+            {
+                _prestamoService.ObtenerTodos().ForEach(p => 
+                    Console.WriteLine($"Prestamo: {p.IdPrestamo} | Libro: {p.IdLibro} | Usuario: {p.IdUsuario}"));
             }
             Console.ReadLine();
         }
