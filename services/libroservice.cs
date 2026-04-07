@@ -24,5 +24,22 @@ namespace LibreriaVIVI.services
             }
             return false;
         }
+
+        // --- MÉTODOS KPI ---
+
+        // Retorna cuántos libros hay en total en el sistema
+        public int TotalLibros() => _libros.Count;
+
+        // Retorna la lista de libros filtrada por disponibilidad
+        public List<Libro> ObtenerPorDisponibilidad(bool disponible)
+        {
+            return _libros.Where(l => l.Disponible == disponible).ToList();
+        }
+
+        // KPI: Conteo por categoría (útil para estadísticas de inventario)
+        public int ContarPorCategoria(string categoria)
+        {
+            return _libros.Count(l => l.Categoria.ToLower() == categoria.ToLower());
+        }
     }
 }

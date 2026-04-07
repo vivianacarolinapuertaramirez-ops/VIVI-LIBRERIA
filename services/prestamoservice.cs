@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ViviLibreria.models;
+using LibreriaVIVI.models;
 
-namespace ViviLibreria.services
+namespace LibreriaVIVI.services
 {
     public class PrestamoService
     {
@@ -21,8 +21,9 @@ namespace ViviLibreria.services
                     IdPrestamo = Guid.NewGuid().ToString().Substring(0, 8),
                     IdUsuario = idUsuario,
                     IdLibro = idLibro,
-                    FechaPrestamo = DateTime.Now.ToShortDateString(),
-                    Estado = "Activo"
+                    FechaPrestamo = DateTime.Now,
+                    FechaLimite = DateTime.Now.AddDays(7),
+                    Estado = EstadoPrestamo.Activo
                 };
 
                 _prestamos.Add(nuevoPrestamo);
@@ -33,5 +34,25 @@ namespace ViviLibreria.services
         }
 
         public List<Prestamo> ObtenerTodos() => _prestamos;
+
+        // --- MÉTODOS KPI ---
+
+        // Retorna la cantidad total de registros en la lista
+        public int TotalPrestamos() => _prestamos.Count;
+
+        // Retorna solo los préstamos que coincidan con un estado (Activo, Devuelto, Vencido)
+        public List<Prestamo> BuscarPorEstado(EstadoPrestamo estado)
+        {
+            return _prestamos.Where(p => p.Estado == estado).ToList();
+        }
+
+        // Calcula el promedio de días que los libros han estado prestados
+        public double PromedioDiasPrestamo()
+        {
+            if (_prestamos.Count == 0) return 0;
+
+            // Calculamos los días transcurridos de cada préstamo y promediamos
+            return _prestamos.Average(p => (DateTime.Now - p.FechaPrestamo).TotalDays);
+        }
     }
 }
